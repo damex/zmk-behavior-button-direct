@@ -21,7 +21,7 @@ Add it to your `config/west.yml`:
   projects:
     - name: zmk-behavior-button-direct
       remote: damex
-      revision: v0.1.0
+      revision: v0.1.1
 ```
 For a local checkout, build with
 `-DZMK_EXTRA_MODULES=<path>/zmk-behavior-button-direct` instead.
