@@ -1,0 +1,10 @@
+# Copyright 2026 Roman Kuzmitskii (@damex)
+# SPDX-License-Identifier: MIT
+
+if DT_HAS_ZMK_BEHAVIOR_BUTTON_DIRECT_ENABLED
+
+module = ZMK_BEHAVIOR_BUTTON_DIRECT
+module-str = zmk_behavior_button_direct
+source "subsys/logging/Kconfig.template.log_config"
+
+endif
