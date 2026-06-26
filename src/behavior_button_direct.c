@@ -15,6 +15,7 @@
 #include <zephyr/sys/util.h>
 
 #include <drivers/behavior.h>
+#include <dt-bindings/zmk/pointing.h>
 #include <zmk/behavior.h>
 #include <zmk/endpoints.h>
 #include <zmk/hid.h>
@@ -55,11 +56,33 @@ static int on_keymap_binding_released(struct zmk_behavior_binding *binding,
     return ZMK_BEHAVIOR_OPAQUE;
 }
 
+#if IS_ENABLED(CONFIG_ZMK_BEHAVIOR_METADATA)
+static const struct behavior_parameter_value_metadata button_values[] = {
+    {.display_name = "MB1", .type = BEHAVIOR_PARAMETER_VALUE_TYPE_VALUE, .value = MB1},
+    {.display_name = "MB2", .type = BEHAVIOR_PARAMETER_VALUE_TYPE_VALUE, .value = MB2},
+    {.display_name = "MB3", .type = BEHAVIOR_PARAMETER_VALUE_TYPE_VALUE, .value = MB3},
+    {.display_name = "MB4", .type = BEHAVIOR_PARAMETER_VALUE_TYPE_VALUE, .value = MB4},
+    {.display_name = "MB5", .type = BEHAVIOR_PARAMETER_VALUE_TYPE_VALUE, .value = MB5},
+};
+BUILD_ASSERT(ARRAY_SIZE(button_values) == ZMK_HID_MOUSE_NUM_BUTTONS,
+             "metadata must list every mouse button");
+
+static const struct behavior_parameter_metadata_set button_metadata_set[] = {{
+    .param1_values = button_values,
+    .param1_values_len = ARRAY_SIZE(button_values),
+}};
+
+static const struct behavior_parameter_metadata button_metadata = {
+    .sets_len = ARRAY_SIZE(button_metadata_set),
+    .sets = button_metadata_set,
+};
+#endif
+
 static const struct behavior_driver_api button_direct_api = {
     .binding_pressed = on_keymap_binding_pressed,
     .binding_released = on_keymap_binding_released,
 #if IS_ENABLED(CONFIG_ZMK_BEHAVIOR_METADATA)
-    .get_parameter_metadata = zmk_behavior_get_empty_param_metadata,
+    .parameter_metadata = &button_metadata,
 #endif
 };
 
